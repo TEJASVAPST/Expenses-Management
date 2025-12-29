@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input id="amt" placeholder="Amount">
+<input id="desc" placeholder="Description">
+<button onclick="add()">Add</button>
+
+<ul id="list"></ul>
+
+<script>
+    const API = "http://localhost:8080/expenses";
+
+    function add() {
+        fetch(API,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                amount:amt.value,
+                description:desc.value
+            })
+        }).then(load);
+    }
+
+    function load(){
+        fetch(API)
+            .then(r=>r.json())
+            .then(d=>{
+                list.innerHTML = d.map(e=>`<li>${e.amount} - ${e.description}</li>`).join("");
+            });
+    }
+    load();
+</script>
+</body>
+</html>
